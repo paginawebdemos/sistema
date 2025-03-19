@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -12,6 +12,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://cdn.jsdelivr.net/npm/howler@2.2.3/dist/howler.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" rel="stylesheet">
     <style>
         :root {
@@ -342,15 +343,13 @@
             max-width: 400px;
         }
 
-        /* Estilos para el hover de los botones en #tablaFiados */
         #tablaFiados .btn-ver:hover {
-            background-color: #d97706 !important; /* Amarillo más oscuro */
+            background-color: #d97706 !important;
         }
         #tablaFiados .btn-pagar:hover {
-            background-color: #059669 !important; /* Verde más oscuro */
+            background-color: #059669 !important;
         }
 
-        /* Ajuste específico para el modalEditarFiado */
         #modalEditarFiado .flex-container {
             display: flex;
             align-items: center;
@@ -372,7 +371,6 @@
             flex-shrink: 0;
         }
 
-        /* Animaciones personalizadas para #inicio */
         @keyframes fade-in-down {
             0% { opacity: 0; transform: translateY(-30px); }
             100% { opacity: 1; transform: translateY(0); }
@@ -421,7 +419,6 @@
             opacity: 0;
         }
 
-        /* Estilos mejorados para #inicio */
         #inicio .header {
             position: relative;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
@@ -555,7 +552,6 @@
             color: #6b7280;
         }
 
-        /* Estilo mejorado para la frase motivadora */
         #dailyQuote {
             position: relative;
             margin: 2rem auto;
@@ -574,7 +570,7 @@
 
         #dailyQuote::before,
         #dailyQuote::after {
-            content: '\201C'; /* Comilla izquierda */
+            content: '\201C';
             position: absolute;
             font-size: 2.5rem;
             color: var(--accent);
@@ -587,12 +583,11 @@
         }
 
         #dailyQuote::after {
-            content: '\201D'; /* Comilla derecha */
+            content: '\201D';
             bottom: 0.5rem;
             right: 1rem;
         }
 
-        /* Ajustes responsivos para #inicio */
         @media (max-width: 768px) {
             #inicio .header {
                 padding: 2rem 1rem;
@@ -619,6 +614,81 @@
             #dailyQuote::before,
             #dailyQuote::after {
                 font-size: 2rem;
+            }
+        }
+
+        .reportes-table th, .reportes-table td {
+            padding: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .reportes-table tbody tr:hover {
+            background: rgba(14, 165, 233, 0.15);
+        }
+
+        .reportes-table tfoot {
+            background: #e5e7eb;
+            color: var(--text);
+        }
+
+        /* Estilos adicionales para Misiones */
+        .mission-card {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(145deg, #ffffff, #f8fafc);
+        }
+
+        .mission-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 70%);
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .mission-item {
+            padding: 1rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .mission-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 215, 0, 0.6);
+            border-radius: 50%;
+            animation: floatParticle 6s infinite ease-in-out;
+        }
+
+        @keyframes floatParticle {
+            0% { transform: translateY(0) scale(1); opacity: 0.8; }
+            50% { transform: translateY(-20px) scale(1.2); opacity: 0.4; }
+            100% { transform: translateY(0) scale(1); opacity: 0.8; }
+        }
+
+        @media (max-width: 768px) {
+            .mission-card {
+                padding: 1rem;
+            }
+            #misiones h2 {
+                font-size: 2rem;
+            }
+            .mission-card h3 {
+                font-size: 1.25rem;
+            }
+            #puntosMisiones {
+                font-size: 2.5rem;
             }
         }
     </style>
@@ -792,71 +862,196 @@
                     <tbody id="tablaClientes"></tbody>
                 </table>
             </div>
-<!-- Fiar -->
-<div id="fiar" class="section hidden fade-in">
-    <h2 class="text-3xl font-bold mb-6">Clientes que Fían</h2>
-    <input type="text" id="buscarProductoFiar" class="w-full p-2 border mb-4" placeholder="Buscar producto" oninput="filtrarProductos('productosFiar')">
-    <div class="flex space-x-2 mb-4">
-        <select id="productosFiar" class="p-2 border flex-1"></select>
-        <input type="number" id="cantidadFiar" class="p-2 border w-24" placeholder="Cantidad">
-        <button onclick="agregarProductoFiar()" class="px-4 py-2 bg-yellow-500 text-white hover:bg-yellow-600">Agregar</button>
-    </div>
-    <input type="text" id="nombreClienteFiar" list="clientesListFiar" class="w-full p-2 border mb-4" placeholder="Nombre del Cliente" required>
-    <datalist id="clientesListFiar"></datalist>
-    <table class="w-full border-collapse holo mb-4">
-        <thead><tr class="bg-gray-700"><th class="border p-2">Producto</th><th class="border p-2">Cantidad</th><th class="border p-2">Precio</th><th class="border p-2">Total</th><th class="border p-2">Acciones</th></tr></thead>
-        <tbody id="detalleFiar"></tbody>
-    </table>
-    <div class="mb-4">
-        <p><strong>Total en Bolívares: </strong><span id="totalBsFiar">0.00</span></p>
-        <p><strong>Total en Dólares: </strong><span id="totalUsdFiar">0.00</span></p>
-    </div>
-    <div class="flex space-x-2">
-        <button onclick="guardarFiado()" class="px-4 py-2 bg-green-500 text-white hover:bg-green-600">Guardar Fiado</button>
-    </div>
-    <table class="w-full border-collapse holo mt-4">
-        <thead>
-            <tr class="bg-gray-700">
-                <th class="border p-2">Fecha</th>
-                <th class="border p-2">Cliente</th>
-                <th class="border p-2">Acciones</th>
-            </tr>
-        </thead>
-        <tbody id="tablaFiados">
-            <tr>
-                <td class="border p-2">2023-10-01</td>
-                <td class="border p-2">Cliente Ejemplo</td>
-                <td class="border p-2">
-                    <button onclick="verFiado()" class="btn-ver px-2 py-1 bg-yellow-500 text-white hover:bg-yellow-600">Ver</button>
-                    <button onclick="pagarFiado()" class="btn-pagar px-2 py-1 bg-green-500 text-white hover:bg-green-600">Pagar</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+
+            <!-- Fiar -->
+            <div id="fiar" class="section hidden fade-in">
+                <h2 class="text-3xl font-bold mb-6">Clientes que Fían</h2>
+                <input type="text" id="buscarProductoFiar" class="w-full p-2 border mb-4" placeholder="Buscar producto" oninput="filtrarProductos('productosFiar')">
+                <div class="flex space-x-2 mb-4">
+                    <select id="productosFiar" class="p-2 border flex-1"></select>
+                    <input type="number" id="cantidadFiar" class="p-2 border w-24" placeholder="Cantidad">
+                    <button onclick="agregarProductoFiar()" class="px-4 py-2 bg-yellow-500 text-white hover:bg-yellow-600">Agregar</button>
+                </div>
+                <input type="text" id="nombreClienteFiar" list="clientesListFiar" class="w-full p-2 border mb-4" placeholder="Nombre del Cliente" required>
+                <datalist id="clientesListFiar"></datalist>
+                <table class="w-full border-collapse holo mb-4">
+                    <thead><tr class="bg-gray-700"><th class="border p-2">Producto</th><th class="border p-2">Cantidad</th><th class="border p-2">Precio</th><th class="border p-2">Total</th><th class="border p-2">Acciones</th></tr></thead>
+                    <tbody id="detalleFiar"></tbody>
+                </table>
+                <div class="mb-4">
+                    <p><strong>Total en Bolívares: </strong><span id="totalBsFiar">0.00</span></p>
+                    <p><strong>Total en Dólares: </strong><span id="totalUsdFiar">0.00</span></p>
+                </div>
+                <div class="flex space-x-2">
+                    <button onclick="guardarFiado()" class="px-4 py-2 bg-green-500 text-white hover:bg-green-600">Guardar Fiado</button>
+                </div>
+                <table class="w-full border-collapse holo mt-4">
+                    <thead>
+                        <tr class="bg-gray-700">
+                            <th class="border p-2">Fecha</th>
+                            <th class="border p-2">Cliente</th>
+                            <th class="border p-2">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaFiados">
+                        <tr>
+                            <td class="border p-2">2023-10-01</td>
+                            <td class="border p-2">Cliente Ejemplo</td>
+                            <td class="border p-2">
+                                <button onclick="verFiado()" class="btn-ver px-2 py-1 bg-yellow-500 text-white hover:bg-yellow-600">Ver</button>
+                                <button onclick="pagarFiado()" class="btn-pagar px-2 py-1 bg-green-500 text-white hover:bg-green-600">Pagar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
             <!-- Reportes -->
             <div id="reportes" class="section hidden fade-in">
                 <h2 class="text-3xl font-bold mb-6">Reportes de Ventas</h2>
-                <div class="flex space-x-2 mb-4">
-                    <input type="text" id="buscarVenta" class="w-full p-2 border" placeholder="Buscar por cliente" oninput="filtrarVentas()">
-                    <input type="date" id="filtroFecha" class="p-2 border" onchange="filtrarVentas()">
+                <div class="holo p-6 mb-6">
+                    <form id="filtrosReporte" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                        <div>
+                            <label class="block font-bold text-blue-400 mb-1">Buscar Cliente</label>
+                            <input type="text" id="buscarVenta" class="w-full p-2 border" placeholder="Nombre del cliente" oninput="filtrarVentas()">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-blue-400 mb-1">Fecha</label>
+                            <input type="date" id="filtroFecha" class="w-full p-2 border" onchange="filtrarVentas()">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-blue-400 mb-1">Tipo de Reporte</label>
+                            <select id="tipoReporte" class="w-full p-2 border" onchange="filtrarVentas()">
+                                <option value="diario">Diario</option>
+                                <option value="semanal">Semanal</option>
+                                <option value="mensual">Mensual</option>
+                            </select>
+                        </div>
+                        <div class="flex items-end">
+                            <button type="button" onclick="limpiarFiltros()" class="w-full px-4 py-2 bg-gray-500 text-white hover:bg-gray-600">Limpiar Filtros</button>
+                        </div>
+                    </form>
+                    <div class="scrollable-table-container">
+                        <table class="w-full border-collapse reportes-table">
+                            <thead>
+                                <tr class="bg-gray-700">
+                                    <th class="border p-2 text-left">Fecha</th>
+                                    <th class="border p-2 text-left">Cliente</th>
+                                    <th class="border p-2 text-right">Total (Bs)</th>
+                                    <th class="border p-2 text-right">Total (USD)</th>
+                                    <th class="border p-2 text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reporteVentasBody"></tbody>
+                            <tfoot>
+                                <tr class="bg-gray-700">
+                                    <td colspan="2" class="border p-2 text-right font-bold total-general">Total General:</td>
+                                    <td class="border p-2 text-right font-bold" id="totalBsReporte">0.00</td>
+                                    <td class="border p-2 text-right font-bold" id="totalUsdReporte">0.00</td>
+                                    <td class="border p-2"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="flex justify-end mt-4">
+                        <button onclick="descargarReporteVentasPDF()" class="px-4 py-2 bg-cyan-500 text-white hover:bg-cyan-600">Descargar PDF</button>
+                    </div>
                 </div>
-                <div id="reporteVentas" class="holo p-4 mb-4 reportes-table"></div>
-                <div class="flex space-x-2 mb-4" id="paginacionVentas"></div>
-                <button onclick="descargarReporteVentasPDF()" class="px-4 py-2 bg-cyan-500 text-white hover:bg-cyan-600">Descargar PDF</button>
             </div>
 
-            <!-- Misiones -->
+            <!-- Modal para Detalles de Venta -->
+            <div id="modalVerVenta" class="modal hidden">
+                <div class="modal-content">
+                    <h3 class="text-lg font-bold mb-2">Detalles de la Venta</h3>
+                    <div id="detalleVerVenta" class="space-y-2"></div>
+                    <div class="flex space-x-2 mt-4">
+                        <button onclick="cerrarModal('modalVerVenta')" class="flex-1 bg-red-500 text-white hover:bg-red-600">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Misiones Mejorada -->
             <div id="misiones" class="section hidden fade-in">
-                <h2 class="text-3xl font-bold mb-6">Misiones Diarias</h2>
-                <div class="holo p-4">
-                    <p class="font-bold text-yellow-400">Nivel: <span id="nivelMisiones">Aprendiz</span></p>
-                    <p class="font-bold text-blue-400">Vender 500 Bs</p>
-                    <p>Progreso: <span id="misionVentas">0/500 Bs</span></p>
-                    <p class="font-bold mt-2 text-green-400">Vender 5 Productos Diferentes</p>
-                    <p>Progreso: <span id="misionProductos">0/5</span></p>
-                    <p class="font-bold mt-2 text-yellow-400">Puntos Acumulados</p>
-                    <p id="puntosMisiones">0</p>
+                <div class="relative">
+                    <h2 class="text-4xl font-bold mb-8 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-teal-500 animate-fade-in-down">Misiones Diarias</h2>
+                    
+                    <!-- Fondo dinámico -->
+                    <div class="absolute inset-0 -z-10 overflow-hidden">
+                        <div class="w-full h-full bg-gradient-to-br from-gray-50 to-gray-100">
+                            <div class="absolute w-96 h-96 bg-blue-200 rounded-full opacity-20 animate-pulse" style="top: -10%; left: -10%;"></div>
+                            <div class="absolute w-72 h-72 bg-teal-200 rounded-full opacity-20 animate-pulse" style="bottom: -5%; right: -5%; animation-delay: 1s;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Contenedor principal -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                        <!-- Tarjeta de Nivel -->
+                        <div class="mission-card bg-white rounded-xl shadow-xl p-6 transform hover:scale-105 transition-all duration-300 border-t-4 border-blue-500">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-xl font-bold text-blue-600">Tu Nivel</h3>
+                                <i class="fas fa-trophy text-2xl text-yellow-400 animate-float"></i>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-3xl font-extrabold text-gray-800" id="nivelMisiones">Aprendiz</p>
+                                <div class="mt-4 w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-blue-500 h-2.5 rounded-full transition-all duration-1000" style="width: 20%;" id="nivelProgreso"></div>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-2">Progreso: <span id="progresoNivel">20%</span></p>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta de Misiones -->
+                        <div class="mission-card bg-white rounded-xl shadow-xl p-6 transform hover:scale-105 transition-all duration-300 border-t-4 border-teal-500 md:col-span-2">
+                            <h3 class="text-xl font-bold text-teal-600 mb-4 flex items-center gap-2">
+                                <i class="fas fa-star text-yellow-400"></i> Tus Misiones
+                            </h3>
+                            <div class="space-y-6">
+                                <!-- Misión 1 -->
+                                <div class="mission-item">
+                                    <div class="flex justify-between items-center">
+                                        <p class="font-semibold text-gray-700">Vender 500 Bs</p>
+                                        <span class="text-sm text-gray-500" id="misionVentas">0/500 Bs</span>
+                                    </div>
+                                    <div class="mt-2 w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-teal-500 h-2 rounded-full transition-all duration-1000" style="width: 0%;" id="progresoVentas"></div>
+                                    </div>
+                                </div>
+                                <!-- Misión 2 -->
+                                <div class="mission-item">
+                                    <div class="flex justify-between items-center">
+                                        <p class="font-semibold text-gray-700">Vender 5 Productos Diferentes</p>
+                                        <span class="text-sm text-gray-500" id="misionProductos">0/5</span>
+                                    </div>
+                                    <div class="mt-2 w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-teal-500 h-2 rounded-full transition-all duration-1000" style="width: 0%;" id="progresoProductos"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Botón de Recompensa -->
+                            <button class="mt-6 w-full py-2 bg-gradient-to-r from-teal-500 to-blue-500 text-white rounded-lg font-semibold hover:from-teal-600 hover:to-blue-600 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed" id="claimReward" disabled>
+                                <i class="fas fa-gift mr-2"></i> Reclamar Recompensa
+                            </button>
+                        </div>
+
+                        <!-- Tarjeta de Puntos -->
+                        <div class="mission-card bg-white rounded-xl shadow-xl p-6 transform hover:scale-105 transition-all duration-300 border-t-4 border-yellow-500">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-xl font-bold text-yellow-600">Puntos</h3>
+                                <i class="fas fa-coins text-2xl text-yellow-400 animate-float"></i>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-4xl font-extrabold text-gray-800 animate-pulse" id="puntosMisiones">0</p>
+                                <p class="text-sm text-gray-500 mt-2">Acumula puntos y sube de nivel</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Efecto de partículas -->
+                    <div class="absolute inset-0 pointer-events-none -z-5">
+                        <div class="particle" style="top: 10%; left: 15%;"></div>
+                        <div class="particle" style="top: 60%; left: 80%; animation-delay: 0.5s;"></div>
+                        <div class="particle" style="top: 80%; left: 30%; animation-delay: 1s;"></div>
+                    </div>
                 </div>
             </div>
 
@@ -1021,6 +1216,7 @@
                     </div>
                 </div>
             </div>
+
             <!-- Ticket -->
             <div id="ticket" class="hidden">
                 <h3 id="ticketBusinessName" class="text-lg font-bold"></h3>
@@ -1029,7 +1225,7 @@
         </div>
     </div>
 
-    <!-- JavaScript para la frase motivadora diaria -->
+    <!-- JavaScript -->
     <script>
         // Lista de frases motivadoras
         const quotes = [
@@ -1048,18 +1244,81 @@
         // Función para mostrar una frase basada en el día del mes
         function displayDailyQuote() {
             const today = new Date();
-            const dayOfMonth = today.getDate(); // Día del mes (1-31)
-            const quoteIndex = (dayOfMonth - 1) % quotes.length; // Selecciona una frase cíclicamente
+            const dayOfMonth = today.getDate();
+            const quoteIndex = (dayOfMonth - 1) % quotes.length;
             document.getElementById('dailyQuote').textContent = quotes[quoteIndex];
         }
 
-        // Ejecutar la función al cargar la página
+        // Función para actualizar el progreso de las misiones
+        function updateMissionsProgress(ventasBs, productosDiferentes, puntos) {
+            const ventasGoal = 500;
+            const ventasProgress = Math.min((ventasBs / ventasGoal) * 100, 100);
+            document.getElementById('misionVentas').textContent = `${ventasBs}/${ventasGoal} Bs`;
+            document.getElementById('progresoVentas').style.width = `${ventasProgress}%`;
+
+            const productosGoal = 5;
+            const productosProgress = Math.min((productosDiferentes / productosGoal) * 100, 100);
+            document.getElementById('misionProductos').textContent = `${productosDiferentes}/${productosGoal}`;
+            document.getElementById('progresoProductos').style.width = `${productosProgress}%`;
+
+            document.getElementById('puntosMisiones').textContent = puntos;
+
+            const nivelProgreso = Math.min((puntos / 100) * 100, 100);
+            document.getElementById('nivelProgreso').style.width = `${nivelProgreso}%`;
+            document.getElementById('progresoNivel').textContent = `${nivelProgreso}%`;
+
+            const niveles = ['Aprendiz', 'Comerciante', 'Maestro', 'Leyenda'];
+            const nivelIndex = Math.min(Math.floor(puntos / 100), niveles.length - 1);
+            document.getElementById('nivelMisiones').textContent = niveles[nivelIndex];
+
+            if (ventasBs >= ventasGoal && productosDiferentes >= productosGoal) {
+                document.getElementById('claimReward').disabled = false;
+            }
+        }
+
+        // Ejecutar al cargar la página
         window.onload = function() {
             displayDailyQuote();
+            updateMissionsProgress(150, 2, 50); // Ejemplo inicial
         };
+
+        // Evento para reclamar recompensa
+        document.getElementById('claimReward').addEventListener('click', () => {
+            alert('¡Recompensa reclamada! Has ganado 50 puntos extra.');
+            updateMissionsProgress(0, 0, parseInt(document.getElementById('puntosMisiones').textContent) + 50);
+        });
+
+        // Función para mostrar secciones (ejemplo básico)
+        function mostrarSeccion(seccionId) {
+            document.querySelectorAll('.section').forEach(section => section.classList.add('hidden'));
+            document.getElementById(seccionId).classList.remove('hidden');
+            document.querySelectorAll('.sidebar button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`nav-${seccionId}`).classList.add('active');
+        }
+
+        // Funciones dummy para evitar errores (puedes reemplazarlas con tu lógica)
+        function abrirModal(modalId) { document.getElementById(modalId).classList.remove('hidden'); }
+        function cerrarModal(modalId) { document.getElementById(modalId).classList.add('hidden'); }
+        function filtrarInventario() {}
+        function filtrarProductos() {}
+        function agregarProductoVenta() {}
+        function finalizarVenta() {}
+        function imprimirTicket() {}
+        function filtrarClientes() {}
+        function agregarProductoFiar() {}
+        function guardarFiado() {}
+        function verFiado() {}
+        function pagarFiado() {}
+        function filtrarVentas() {}
+        function limpiarFiltros() {}
+        function descargarReporteVentasPDF() {}
+        function calcularTotalFiado() {}
+        function guardarConfig() {}
+        function toggleTasaDolarInput() {}
+        function calcularPrecioVentaBs() {}
+        function actualizarPrecioVentaBs() {}
+        function agregarProductoEditarFiado() {}
     </script>
-</body>
-</html>
 
 <script>
     const { jsPDF } = window.jspdf;
