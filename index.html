@@ -853,7 +853,7 @@
                 <h2 class="text-3xl font-bold mb-6">Registrar Venta</h2>
                 <input type="text" id="buscarProductoVenta" class="w-full p-2 border mb-4" placeholder="Buscar producto" oninput="filtrarProductos('productosVenta')">
                 <div class="flex space-x-2 mb-4">
-                    <select id="productosVenta" class="p-2 border flex-1></select>
+                    <select id="productosVenta" class="p-2 border flex-1"></select>
                     <input type="number" id="cantidadVenta" class="p-2 border w-24" placeholder="Cantidad">
                     <button onclick="agregarProductoVenta()" class="px-4 py-2 bg-yellow-500 text-white hover:bg-yellow-600">Agregar</button>
                 </div>
@@ -926,7 +926,7 @@
                 </table>
             </div>
 
-            <!-- Reportes -->
+            <!-- Reportes (continuación) -->
             <div id="reportes" class="section hidden fade-in">
                 <h2 class="text-3xl font-bold mb-6">Reportes de Ventas</h2>
                 <div class="holo p-6 mb-6">
@@ -1307,7 +1307,7 @@
             updateMissionsProgress(0, 0, parseInt(document.getElementById('puntosMisiones').textContent) + 50);
         });
 
-        // Función para mostrar secciones (ejemplo básico)
+        // Función para mostrar secciones
         function mostrarSeccion(seccionId) {
             document.querySelectorAll('.section').forEach(section => section.classList.add('hidden'));
             document.getElementById(seccionId).classList.remove('hidden');
@@ -1338,7 +1338,6 @@
         function actualizarPrecioVentaBs() {}
         function agregarProductoEditarFiado() {}
     </script>
-
 <script>
     const { jsPDF } = window.jspdf;
     let inventario = [];
