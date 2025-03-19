@@ -631,11 +631,28 @@
             color: var(--text);
         }
 
-        /* Estilos adicionales para Misiones */
+        /* Estilos ajustados para Misiones */
+        #misiones .mission-title {
+            position: sticky;
+            top: 0;
+            background: #ffffff;
+            z-index: 10;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
         .mission-card {
             position: relative;
             overflow: hidden;
             background: linear-gradient(145deg, #ffffff, #f8fafc);
+            padding: 1rem; /* Reducido */
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .mission-card:hover {
+            transform: scale(1.03);
         }
 
         .mission-card::before {
@@ -651,21 +668,21 @@
         }
 
         .mission-item {
-            padding: 1rem;
-            border-radius: 8px;
+            padding: 0.75rem; /* Reducido */
+            border-radius: 6px;
             background: rgba(255, 255, 255, 0.9);
             transition: transform 0.3s ease;
         }
 
         .mission-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transform: translateX(3px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
         .particle {
             position: absolute;
-            width: 8px;
-            height: 8px;
+            width: 6px; /* Reducido */
+            height: 6px;
             background: rgba(255, 215, 0, 0.6);
             border-radius: 50%;
             animation: floatParticle 6s infinite ease-in-out;
@@ -673,22 +690,25 @@
 
         @keyframes floatParticle {
             0% { transform: translateY(0) scale(1); opacity: 0.8; }
-            50% { transform: translateY(-20px) scale(1.2); opacity: 0.4; }
+            50% { transform: translateY(-15px) scale(1.1); opacity: 0.4; }
             100% { transform: translateY(0) scale(1); opacity: 0.8; }
         }
 
         @media (max-width: 768px) {
             .mission-card {
-                padding: 1rem;
+                padding: 0.75rem;
             }
-            #misiones h2 {
-                font-size: 2rem;
+            #misiones .mission-title {
+                font-size: 1.5rem;
             }
             .mission-card h3 {
-                font-size: 1.25rem;
+                font-size: 1rem;
             }
             #puntosMisiones {
-                font-size: 2.5rem;
+                font-size: 2rem;
+            }
+            .mission-item {
+                padding: 0.5rem;
             }
         }
     </style>
@@ -833,7 +853,7 @@
                 <h2 class="text-3xl font-bold mb-6">Registrar Venta</h2>
                 <input type="text" id="buscarProductoVenta" class="w-full p-2 border mb-4" placeholder="Buscar producto" oninput="filtrarProductos('productosVenta')">
                 <div class="flex space-x-2 mb-4">
-                    <select id="productosVenta" class="p-2 border flex-1"></select>
+                    <select id="productosVenta" class="p-2 border flex-1></select>
                     <input type="number" id="cantidadVenta" class="p-2 border w-24" placeholder="Cantidad">
                     <button onclick="agregarProductoVenta()" class="px-4 py-2 bg-yellow-500 text-white hover:bg-yellow-600">Agregar</button>
                 </div>
@@ -970,10 +990,10 @@
                 </div>
             </div>
 
-            <!-- Misiones Mejorada -->
+            <!-- Misiones Ajustada -->
             <div id="misiones" class="section hidden fade-in">
                 <div class="relative">
-                    <h2 class="text-4xl font-bold mb-8 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-teal-500 animate-fade-in-down">Misiones Diarias</h2>
+                    <h2 class="mission-title text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-teal-500 animate-fade-in-down">Misiones Diarias</h2>
                     
                     <!-- Fondo dinámico -->
                     <div class="absolute inset-0 -z-10 overflow-hidden">
@@ -984,64 +1004,63 @@
                     </div>
 
                     <!-- Contenedor principal -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto mt-4">
                         <!-- Tarjeta de Nivel -->
-                        <div class="mission-card bg-white rounded-xl shadow-xl p-6 transform hover:scale-105 transition-all duration-300 border-t-4 border-blue-500">
-                            <div class="flex items-center justify-between mb-4">
-                                <h3 class="text-xl font-bold text-blue-600">Tu Nivel</h3>
-                                <i class="fas fa-trophy text-2xl text-yellow-400 animate-float"></i>
+                        <div class="mission-card bg-white border-t-4 border-blue-500">
+                            <div class="flex items-center justify-between mb-2">
+                                <h3 class="text-lg font-bold text-blue-600">Tu Nivel</h3>
+                                <i class="fas fa-trophy text-xl text-yellow-400 animate-float"></i>
                             </div>
                             <div class="text-center">
-                                <p class="text-3xl font-extrabold text-gray-800" id="nivelMisiones">Aprendiz</p>
-                                <div class="mt-4 w-full bg-gray-200 rounded-full h-2.5">
-                                    <div class="bg-blue-500 h-2.5 rounded-full transition-all duration-1000" style="width: 20%;" id="nivelProgreso"></div>
+                                <p class="text-xl font-bold text-gray-800" id="nivelMisiones">Aprendiz</p>
+                                <div class="mt-2 w-full bg-gray-200 rounded-full h-1.5">
+                                    <div class="bg-blue-500 h-1.5 rounded-full transition-all duration-1000" style="width: 20%;" id="nivelProgreso"></div>
                                 </div>
-                                <p class="text-sm text-gray-500 mt-2">Progreso: <span id="progresoNivel">20%</span></p>
+                                <p class="text-xs text-gray-500 mt-1">Progreso: <span id="progresoNivel">20%</span></p>
                             </div>
                         </div>
 
                         <!-- Tarjeta de Misiones -->
-                        <div class="mission-card bg-white rounded-xl shadow-xl p-6 transform hover:scale-105 transition-all duration-300 border-t-4 border-teal-500 md:col-span-2">
-                            <h3 class="text-xl font-bold text-teal-600 mb-4 flex items-center gap-2">
+                        <div class="mission-card bg-white border-t-4 border-teal-500 md:col-span-2">
+                            <h3 class="text-lg font-bold text-teal-600 mb-2 flex items-center gap-2">
                                 <i class="fas fa-star text-yellow-400"></i> Tus Misiones
                             </h3>
-                            <div class="space-y-6">
+                            <div class="space-y-4">
                                 <!-- Misión 1 -->
                                 <div class="mission-item">
                                     <div class="flex justify-between items-center">
-                                        <p class="font-semibold text-gray-700">Vender 500 Bs</p>
-                                        <span class="text-sm text-gray-500" id="misionVentas">0/500 Bs</span>
+                                        <p class="text-sm font-semibold text-gray-700">Vender 500 Bs</p>
+                                        <span class="text-xs text-gray-500" id="misionVentas">0/500 Bs</span>
                                     </div>
-                                    <div class="mt-2 w-full bg-gray-200 rounded-full h-2">
-                                        <div class="bg-teal-500 h-2 rounded-full transition-all duration-1000" style="width: 0%;" id="progresoVentas"></div>
+                                    <div class="mt-1 w-full bg-gray-200 rounded-full h-1">
+                                        <div class="bg-teal-500 h-1 rounded-full transition-all duration-1000" style="width: 0%;" id="progresoVentas"></div>
                                     </div>
                                 </div>
                                 <!-- Misión 2 -->
                                 <div class="mission-item">
                                     <div class="flex justify-between items-center">
-                                        <p class="font-semibold text-gray-700">Vender 5 Productos Diferentes</p>
-                                        <span class="text-sm text-gray-500" id="misionProductos">0/5</span>
+                                        <p class="text-sm font-semibold text-gray-700">Vender 5 Productos</p>
+                                        <span class="text-xs text-gray-500" id="misionProductos">0/5</span>
                                     </div>
-                                    <div class="mt-2 w-full bg-gray-200 rounded-full h-2">
-                                        <div class="bg-teal-500 h-2 rounded-full transition-all duration-1000" style="width: 0%;" id="progresoProductos"></div>
+                                    <div class="mt-1 w-full bg-gray-200 rounded-full h-1">
+                                        <div class="bg-teal-500 h-1 rounded-full transition-all duration-1000" style="width: 0%;" id="progresoProductos"></div>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Botón de Recompensa -->
-                            <button class="mt-6 w-full py-2 bg-gradient-to-r from-teal-500 to-blue-500 text-white rounded-lg font-semibold hover:from-teal-600 hover:to-blue-600 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed" id="claimReward" disabled>
-                                <i class="fas fa-gift mr-2"></i> Reclamar Recompensa
+                            <button class="mt-4 w-full py-1.5 bg-gradient-to-r from-teal-500 to-blue-500 text-white rounded-md font-semibold text-sm hover:from-teal-600 hover:to-blue-600 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed" id="claimReward" disabled>
+                                <i class="fas fa-gift mr-1"></i> Reclamar
                             </button>
                         </div>
 
                         <!-- Tarjeta de Puntos -->
-                        <div class="mission-card bg-white rounded-xl shadow-xl p-6 transform hover:scale-105 transition-all duration-300 border-t-4 border-yellow-500">
-                            <div class="flex items-center justify-between mb-4">
-                                <h3 class="text-xl font-bold text-yellow-600">Puntos</h3>
-                                <i class="fas fa-coins text-2xl text-yellow-400 animate-float"></i>
+                        <div class="mission-card bg-white border-t-4 border-yellow-500">
+                            <div class="flex items-center justify-between mb-2">
+                                <h3 class="text-lg font-bold text-yellow-600">Puntos</h3>
+                                <i class="fas fa-coins text-xl text-yellow-400 animate-float"></i>
                             </div>
                             <div class="text-center">
-                                <p class="text-4xl font-extrabold text-gray-800 animate-pulse" id="puntosMisiones">0</p>
-                                <p class="text-sm text-gray-500 mt-2">Acumula puntos y sube de nivel</p>
+                                <p class="text-2xl font-bold text-gray-800 animate-pulse" id="puntosMisiones">0</p>
+                                <p class="text-xs text-gray-500 mt-1">Acumula y sube de nivel</p>
                             </div>
                         </div>
                     </div>
