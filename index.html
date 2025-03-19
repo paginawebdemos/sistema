@@ -631,28 +631,11 @@
             color: var(--text);
         }
 
-        /* Estilos ajustados para Misiones */
-        #misiones .mission-title {
-            position: sticky;
-            top: 0;
-            background: #ffffff;
-            z-index: 10;
-            padding: 1rem 0;
-            text-align: center;
-        }
-
+        /* Estilos adicionales para Misiones */
         .mission-card {
             position: relative;
             overflow: hidden;
             background: linear-gradient(145deg, #ffffff, #f8fafc);
-            padding: 1rem; /* Reducido */
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .mission-card:hover {
-            transform: scale(1.03);
         }
 
         .mission-card::before {
@@ -668,20 +651,20 @@
         }
 
         .mission-item {
-            padding: 0.75rem; /* Reducido */
+            padding: 0.5rem;
             border-radius: 6px;
             background: rgba(255, 255, 255, 0.9);
             transition: transform 0.3s ease;
         }
 
         .mission-item:hover {
-            transform: translateX(3px);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transform: translateX(5px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         }
 
         .particle {
             position: absolute;
-            width: 6px; /* Reducido */
+            width: 6px;
             height: 6px;
             background: rgba(255, 215, 0, 0.6);
             border-radius: 50%;
@@ -690,7 +673,7 @@
 
         @keyframes floatParticle {
             0% { transform: translateY(0) scale(1); opacity: 0.8; }
-            50% { transform: translateY(-15px) scale(1.1); opacity: 0.4; }
+            50% { transform: translateY(-15px) scale(1.2); opacity: 0.4; }
             100% { transform: translateY(0) scale(1); opacity: 0.8; }
         }
 
@@ -698,17 +681,17 @@
             .mission-card {
                 padding: 0.75rem;
             }
-            #misiones .mission-title {
-                font-size: 1.5rem;
+            #misiones h2 {
+                font-size: 1.75rem;
             }
             .mission-card h3 {
                 font-size: 1rem;
             }
             #puntosMisiones {
-                font-size: 2rem;
+                font-size: 1.5rem;
             }
-            .mission-item {
-                padding: 0.5rem;
+            .mission-item p, .mission-item span {
+                font-size: 0.75rem;
             }
         }
     </style>
@@ -926,7 +909,7 @@
                 </table>
             </div>
 
-            <!-- Reportes (continuación) -->
+            <!-- Reportes -->
             <div id="reportes" class="section hidden fade-in">
                 <h2 class="text-3xl font-bold mb-6">Reportes de Ventas</h2>
                 <div class="holo p-6 mb-6">
@@ -990,11 +973,10 @@
                 </div>
             </div>
 
-            <!-- Misiones Ajustada -->
+            <!-- Misiones Mejorada -->
             <div id="misiones" class="section hidden fade-in">
+                <h2 class="text-3xl font-bold mb-6 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-teal-500">Misiones Diarias</h2>
                 <div class="relative">
-                    <h2 class="mission-title text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-teal-500 animate-fade-in-down">Misiones Diarias</h2>
-                    
                     <!-- Fondo dinámico -->
                     <div class="absolute inset-0 -z-10 overflow-hidden">
                         <div class="w-full h-full bg-gradient-to-br from-gray-50 to-gray-100">
@@ -1004,62 +986,63 @@
                     </div>
 
                     <!-- Contenedor principal -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto mt-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
                         <!-- Tarjeta de Nivel -->
-                        <div class="mission-card bg-white border-t-4 border-blue-500">
+                        <div class="mission-card bg-white rounded-lg shadow-lg p-4 transform hover:scale-105 transition-all duration-300 border-t-4 border-blue-500">
                             <div class="flex items-center justify-between mb-2">
                                 <h3 class="text-lg font-bold text-blue-600">Tu Nivel</h3>
                                 <i class="fas fa-trophy text-xl text-yellow-400 animate-float"></i>
                             </div>
                             <div class="text-center">
-                                <p class="text-xl font-bold text-gray-800" id="nivelMisiones">Aprendiz</p>
-                                <div class="mt-2 w-full bg-gray-200 rounded-full h-1.5">
-                                    <div class="bg-blue-500 h-1.5 rounded-full transition-all duration-1000" style="width: 20%;" id="nivelProgreso"></div>
+                                <p class="text-xl font-extrabold text-gray-800" id="nivelMisiones">Aprendiz</p>
+                                <div class="mt-2 w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-blue-500 h-2 rounded-full transition-all duration-1000" style="width: 20%;" id="nivelProgreso"></div>
                                 </div>
                                 <p class="text-xs text-gray-500 mt-1">Progreso: <span id="progresoNivel">20%</span></p>
                             </div>
                         </div>
 
                         <!-- Tarjeta de Misiones -->
-                        <div class="mission-card bg-white border-t-4 border-teal-500 md:col-span-2">
-                            <h3 class="text-lg font-bold text-teal-600 mb-2 flex items-center gap-2">
-                                <i class="fas fa-star text-yellow-400"></i> Tus Misiones
+                        <div class="mission-card bg-white rounded-lg shadow-lg p-4 transform hover:scale-105 transition-all duration-300 border-t-4 border-teal-500 md:col-span-2">
+                            <h3 class="text-lg font-bold text-teal-600 mb-3 flex items-center gap-2">
+                                <i class="fas fa-star text-xl text-yellow-400"></i> Tus Misiones
                             </h3>
                             <div class="space-y-4">
                                 <!-- Misión 1 -->
                                 <div class="mission-item">
                                     <div class="flex justify-between items-center">
-                                        <p class="text-sm font-semibold text-gray-700">Vender 500 Bs</p>
+                                        <p class="font-semibold text-gray-700 text-sm">Vender 500 Bs</p>
                                         <span class="text-xs text-gray-500" id="misionVentas">0/500 Bs</span>
                                     </div>
-                                    <div class="mt-1 w-full bg-gray-200 rounded-full h-1">
-                                        <div class="bg-teal-500 h-1 rounded-full transition-all duration-1000" style="width: 0%;" id="progresoVentas"></div>
+                                    <div class="mt-1 w-full bg-gray-200 rounded-full h-1.5">
+                                        <div class="bg-teal-500 h-1.5 rounded-full transition-all duration-1000" style="width: 0%;" id="progresoVentas"></div>
                                     </div>
                                 </div>
                                 <!-- Misión 2 -->
                                 <div class="mission-item">
                                     <div class="flex justify-between items-center">
-                                        <p class="text-sm font-semibold text-gray-700">Vender 5 Productos</p>
+                                        <p class="font-semibold text-gray-700 text-sm">Vender 5 Productos</p>
                                         <span class="text-xs text-gray-500" id="misionProductos">0/5</span>
                                     </div>
-                                    <div class="mt-1 w-full bg-gray-200 rounded-full h-1">
-                                        <div class="bg-teal-500 h-1 rounded-full transition-all duration-1000" style="width: 0%;" id="progresoProductos"></div>
+                                    <div class="mt-1 w-full bg-gray-200 rounded-full h-1.5">
+                                        <div class="bg-teal-500 h-1.5 rounded-full transition-all duration-1000" style="width: 0%;" id="progresoProductos"></div>
                                     </div>
                                 </div>
                             </div>
+                            <!-- Botón de Recompensa -->
                             <button class="mt-4 w-full py-1.5 bg-gradient-to-r from-teal-500 to-blue-500 text-white rounded-md font-semibold text-sm hover:from-teal-600 hover:to-blue-600 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed" id="claimReward" disabled>
                                 <i class="fas fa-gift mr-1"></i> Reclamar
                             </button>
                         </div>
 
                         <!-- Tarjeta de Puntos -->
-                        <div class="mission-card bg-white border-t-4 border-yellow-500">
+                        <div class="mission-card bg-white rounded-lg shadow-lg p-4 transform hover:scale-105 transition-all duration-300 border-t-4 border-yellow-500">
                             <div class="flex items-center justify-between mb-2">
                                 <h3 class="text-lg font-bold text-yellow-600">Puntos</h3>
                                 <i class="fas fa-coins text-xl text-yellow-400 animate-float"></i>
                             </div>
                             <div class="text-center">
-                                <p class="text-2xl font-bold text-gray-800 animate-pulse" id="puntosMisiones">0</p>
+                                <p class="text-2xl font-extrabold text-gray-800 animate-pulse" id="puntosMisiones">0</p>
                                 <p class="text-xs text-gray-500 mt-1">Acumula y sube de nivel</p>
                             </div>
                         </div>
@@ -1307,7 +1290,7 @@
             updateMissionsProgress(0, 0, parseInt(document.getElementById('puntosMisiones').textContent) + 50);
         });
 
-        // Función para mostrar secciones
+        // Función para mostrar secciones (ejemplo básico)
         function mostrarSeccion(seccionId) {
             document.querySelectorAll('.section').forEach(section => section.classList.add('hidden'));
             document.getElementById(seccionId).classList.remove('hidden');
@@ -1338,6 +1321,7 @@
         function actualizarPrecioVentaBs() {}
         function agregarProductoEditarFiado() {}
     </script>
+
 <script>
     const { jsPDF } = window.jspdf;
     let inventario = [];
