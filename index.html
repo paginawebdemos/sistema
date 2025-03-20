@@ -16,10 +16,10 @@
     <link href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary: #00b4ff; /* Azul más intenso */
-            --secondary: #1e3a8a; /* Azul oscuro más vibrante */
-            --accent: #00e676; /* Verde más brillante */
-            --text: #111827; /* Negro más intenso */
+            --primary: #00b4ff;
+            --secondary: #1e3a8a;
+            --accent: #00e676;
+            --text: #111827;
             --card-bg: #ffffff;
             --border-black: #000000;
         }
@@ -116,7 +116,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 230, 118, 0.4), transparent); /* Más intenso */
+            background: linear-gradient(90deg, transparent, rgba(0, 230, 118, 0.4), transparent);
             transition: left 0.5s;
         }
 
@@ -131,7 +131,7 @@
         }
 
         .sidebar button:hover {
-            background: rgba(0, 230, 118, 0.3); /* Verde más intenso */
+            background: rgba(0, 230, 118, 0.3);
             transform: translateX(5px);
         }
 
@@ -172,7 +172,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.7); /* Fondo más oscuro */
+            background: rgba(0, 0, 0, 0.7);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -227,7 +227,6 @@
             transform: none;
         }
 
-        /* Colores de botones más intensos */
         .bg-blue-500 { background-color: #0284ff; }
         .bg-blue-500:hover { background-color: #0059ff; }
         .bg-green-500 { background-color: #00cc66; }
@@ -277,7 +276,7 @@
         }
 
         tr:hover td {
-            background: rgba(0, 180, 255, 0.2); /* Más intenso */
+            background: rgba(0, 180, 255, 0.2);
             transition: background 0.2s;
         }
 
@@ -345,10 +344,10 @@
         }
 
         #tablaFiados .btn-ver:hover {
-            background-color: #ffaa00 !important; /* Más intenso */
+            background-color: #ffaa00 !important;
         }
         #tablaFiados .btn-pagar:hover {
-            background-color: #00a352 !important; /* Más intenso */
+            background-color: #00a352 !important;
         }
 
         #modalEditarFiado .flex-container {
@@ -624,7 +623,7 @@
         }
 
         .reportes-table tbody tr:hover {
-            background: rgba(0, 180, 255, 0.25); /* Más intenso */
+            background: rgba(0, 180, 255, 0.25);
         }
 
         .reportes-table tfoot {
@@ -633,13 +632,51 @@
         }
 
         /* Estilos ajustados para Misiones */
+        #misiones {
+            position: relative;
+            background: linear-gradient(135deg, #1e3a8a, #00b4ff); /* Fondo gradiente más dinámico */
+            padding: 2rem;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
         #misiones .mission-title {
             position: sticky;
             top: 0;
-            background: #ffffff;
+            background: rgba(255, 255, 255, 0.9);
             z-index: 10;
             padding: 1rem 0;
             text-align: center;
+            border-radius: 8px;
+        }
+
+        #misiones::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" fill-opacity="1" d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,138.7C672,128,768,160,864,181.3C960,203,1056,213,1152,202.7C1248,192,1344,160,1392,144L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            z-index: 0;
+        }
+
+        #misiones::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(0, 230, 118, 0.2), transparent 70%);
+            animation: pulseBackground 10s infinite ease-in-out;
+            z-index: 0;
+        }
+
+        @keyframes pulseBackground {
+            0% { transform: scale(1); opacity: 0.2; }
+            50% { transform: scale(1.1); opacity: 0.4; }
+            100% { transform: scale(1); opacity: 0.2; }
         }
 
         .mission-card {
@@ -650,6 +687,7 @@
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
+            z-index: 1;
         }
 
         .mission-card:hover {
@@ -684,9 +722,10 @@
             position: absolute;
             width: 6px;
             height: 6px;
-            background: rgba(255, 215, 0, 0.8); /* Más intenso */
+            background: rgba(255, 215, 0, 0.8);
             border-radius: 50%;
             animation: floatParticle 6s infinite ease-in-out;
+            z-index: 0;
         }
 
         @keyframes floatParticle {
@@ -995,17 +1034,9 @@
             <div id="misiones" class="section hidden fade-in">
                 <div class="relative">
                     <h2 class="mission-title text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-teal-500 animate-fade-in-down">Misiones Diarias</h2>
-                    
-                    <!-- Fondo dinámico -->
-                    <div class="absolute inset-0 -z-10 overflow-hidden">
-                        <div class="w-full h-full bg-gradient-to-br from-gray-50 to-gray-100">
-                            <div class="absolute w-96 h-96 bg-blue-200 rounded-full opacity-20 animate-pulse" style="top: -10%; left: -10%;"></div>
-                            <div class="absolute w-72 h-72 bg-teal-200 rounded-full opacity-20 animate-pulse" style="bottom: -5%; right: -5%; animation-delay: 1s;"></div>
-                        </div>
-                    </div>
 
                     <!-- Contenedor principal -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto mt-4">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 max-w-5xl mx-auto mt-4">
                         <!-- Tarjeta de Nivel -->
                         <div class="mission-card bg-white border-t-4 border-blue-500">
                             <div class="flex items-center justify-between mb-2">
@@ -1048,9 +1079,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="mt-4 w-full py-1.5 bg-gradient-to-r from-teal-500 to-blue-500 text-white rounded-md font-semibold text-sm hover:from-teal-600 hover:to-blue-600 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed" id="claimReward" disabled>
-                                <i class="fas fa-gift mr-1"></i> Reclamar
-                            </button>
                         </div>
 
                         <!-- Tarjeta de Puntos -->
@@ -1064,10 +1092,22 @@
                                 <p class="text-xs text-gray-500 mt-1">Acumula y sube de nivel</p>
                             </div>
                         </div>
+
+                        <!-- Nueva Tarjeta de Logros -->
+                        <div class="mission-card bg-white border-t-4 border-purple-500">
+                            <div class="flex items-center justify-between mb-2">
+                                <h3 class="text-lg font-bold text-purple-600">Logros</h3>
+                                <i class="fas fa-medal text-xl text-purple-400 animate-float"></i>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-xl font-bold text-gray-800" id="logrosTotal">3/10</p>
+                                <p class="text-xs text-gray-500 mt-1">¡Desbloquea más recompensas!</p>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Efecto de partículas -->
-                    <div class="absolute inset-0 pointer-events-none -z-5">
+                    <div class="absolute inset-0 pointer-events-none">
                         <div class="particle" style="top: 10%; left: 15%;"></div>
                         <div class="particle" style="top: 60%; left: 80%; animation-delay: 0.5s;"></div>
                         <div class="particle" style="top: 80%; left: 30%; animation-delay: 1s;"></div>
@@ -1290,10 +1330,6 @@
             const niveles = ['Aprendiz', 'Comerciante', 'Maestro', 'Leyenda'];
             const nivelIndex = Math.min(Math.floor(puntos / 100), niveles.length - 1);
             document.getElementById('nivelMisiones').textContent = niveles[nivelIndex];
-
-            if (ventasBs >= ventasGoal && productosDiferentes >= productosGoal) {
-                document.getElementById('claimReward').disabled = false;
-            }
         }
 
         // Ejecutar al cargar la página
@@ -1301,12 +1337,6 @@
             displayDailyQuote();
             updateMissionsProgress(150, 2, 50); // Ejemplo inicial
         };
-
-        // Evento para reclamar recompensa
-        document.getElementById('claimReward').addEventListener('click', () => {
-            alert('¡Recompensa reclamada! Has ganado 50 puntos extra.');
-            updateMissionsProgress(0, 0, parseInt(document.getElementById('puntosMisiones').textContent) + 50);
-        });
 
         // Función para mostrar secciones
         function mostrarSeccion(seccionId) {
