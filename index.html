@@ -173,7 +173,7 @@
             right: 0;
             bottom: 0;
             background: rgba(0, 0, 0, 0.7);
-            display Suchflex;
+            display: flex;
             align-items: center;
             justify-content: center;
             z-index: 1000;
@@ -911,7 +911,7 @@
             <!-- Dashboard -->
             <div id="dashboard" class="section hidden fade-in">
                 <h2 class="text-3xl font-bold mb-6">Dashboard</h2>
-                <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                     <div class="p-6 holo">
                         <i class="fas fa-dollar-sign"></i>
                         <div>
@@ -939,15 +939,6 @@
                         <div>
                             <p class="font-bold text-purple-400">Tasa del Dólar</p>
                             <p id="tasaDolar" class="text-2xl">43.50 Bs/USD <span id="tasaModo" class="text-sm">(Manual)</span></p>
-                        </div>
-                    </div>
-                    <!-- Nueva tarjeta: Tendencia Semanal -->
-                    <div class="p-6 holo">
-                        <i class="fas fa-chart-bar"></i>
-                        <div>
-                            <p class="font-bold text-teal-400">Tendencia Semanal</p>
-                            <p id="tendenciaSemanal" class="text-2xl">+12%</p>
-                            <p class="text-sm text-gray-400">vs semana pasada</p>
                         </div>
                     </div>
                 </div>
