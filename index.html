@@ -936,54 +936,81 @@
                 </div>
             </div>
 
-             <!-- Dashboard -->
-            <div id="dashboard" class="section hidden fade-in">
-                <h2 class="text-3xl font-bold mb-6">Dashboard</h2>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <div class="p-6 holo">
-                        <i class="fas fa-dollar-sign"></i>
-                        <div>
-                            <p class="font-bold text-blue-400">Ventas Hoy</p>
-                            <p id="ventasHoy" class="text-2xl">0.00 Bs</p>
-                            <p id="rendimiento" class="text-sm text-gray-400">0% vs ayer</p>
-                        </div>
-                    </div>
-                    <div class="p-6 holo">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <div>
-                            <p class="font-bold text-yellow-400">Stock Bajo</p>
-                            <p id="stockBajo" class="text-2xl">0</p>
-                        </div>
-                    </div>
-                    <div class="p-6 holo">
-                        <i class="fas fa-users"></i>
-                        <div>
-                            <p class="font-bold text-green-400">Clientes</p>
-                            <p id="totalClientes" class="text-2xl">0</p>
-                        </div>
-                    </div>
-                    <div class="p-6 holo">
-                        <i class="fas fa-exchange-alt"></i>
-                        <div>
-                            <p class="font-bold text-purple-400">Tasa del Dólar</p>
-                            <p id="tasaDolar" class="text-2xl">43.50 Bs/USD <span id="tasaModo" class="text-sm">(Manual)</span></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                    <div class="holo p-4"><canvas id="ventasChart"></canvas></div>
-                    <div class="holo p-4"><canvas id="productosChart"></canvas></div>
+           <!-- Dashboard -->
+<div id="dashboard" class="section hidden fade-in">
+    <div class="relative">
+        <h2 class="dashboard-title text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-teal-500 animate-fade-in-down">Dashboard</h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
+            <div class="p-6 holo dashboard-card">
+                <i class="fas fa-dollar-sign"></i>
+                <div>
+                    <p class="font-bold text-blue-400">Ventas Hoy</p>
+                    <p id="ventasHoy" class="text-2xl">0.00 Bs</p>
+                    <p id="rendimiento" class="text-sm text-gray-400">0% vs ayer</p>
                 </div>
             </div>
-                    <!-- Partículas -->
-                    <div class="absolute inset-0 pointer-events-none">
-                        <div class="dashboard-particle" style="top: 20%; left: 10%;"></div>
-                        <div class="dashboard-particle" style="top: 70%; left: 60%; animation-delay: 0.5s;"></div>
-                        <div class="dashboard-particle" style="top: 50%; left: 80%; animation-delay: 1s;"></div>
-                    </div>
+            <div class="p-6 holo dashboard-card">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>
+                    <p class="font-bold text-yellow-400">Stock Bajo</p>
+                    <p id="stockBajo" class="text-2xl">0</p>
                 </div>
             </div>
-
+            <div class="p-6 holo dashboard-card">
+                <i class="fas fa-users"></i>
+                <div>
+                    <p class="font-bold text-green-400">Clientes</p>
+                    <p id="totalClientes" class="text-2xl">0</p>
+                </div>
+            </div>
+            <div class="p-6 holo dashboard-card">
+                <i class="fas fa-exchange-alt"></i>
+                <div>
+                    <p class="font-bold text-purple-400">Tasa del Dólar</p>
+                    <p id="tasaDolar" class="text-2xl">43.50 Bs/USD <span id="tasaModo" class="text-sm">(Manual)</span></p>
+                </div>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            <div class="holo p-4 dashboard-card"><canvas id="ventasChart"></canvas></div>
+            <div class="holo p-4 dashboard-card">
+                <h3 class="text-lg font-bold text-teal-600 mb-2">Unidades Más Vendidas</h3>
+                <table class="w-full">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Unidades Vendidas</th>
+                            <th>Total (Bs)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Producto A</td>
+                            <td>15</td>
+                            <td>150.00</td>
+                        </tr>
+                        <tr>
+                            <td>Producto B</td>
+                            <td>12</td>
+                            <td>120.00</td>
+                        </tr>
+                        <tr>
+                            <td>Producto C</td>
+                            <td>8</td>
+                            <td>80.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- Partículas -->
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="dashboard-particle" style="top: 20%; left: 10%;"></div>
+            <div class="dashboard-particle" style="top: 70%; left: 60%; animation-delay: 0.5s;"></div>
+            <div class="dashboard-particle" style="top: 50%; left: 80%; animation-delay: 1s;"></div>
+        </div>
+    </div>
+</div>
             <!-- Inventario -->
             <div id="inventario" class="section hidden fade-in">
                 <h2 class="text-3xl font-bold mb-6">Gestión de Inventario</h2>
