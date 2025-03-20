@@ -173,7 +173,7 @@
             right: 0;
             bottom: 0;
             background: rgba(0, 0, 0, 0.7);
-            display: flex;
+            display Suchflex;
             align-items: center;
             justify-content: center;
             z-index: 1000;
@@ -395,6 +395,12 @@
         @keyframes quote-reveal {
             0% { opacity: 0; transform: scale(0.95); }
             100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes rotatePulse {
+            0% { transform: rotate(0deg) scale(1); opacity: 0.3; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.5; }
+            100% { transform: rotate(360deg) scale(1); opacity: 0.3; }
         }
 
         .animate-fade-in-down {
@@ -631,10 +637,91 @@
             color: var(--text);
         }
 
+        /* Estilos ajustados para Dashboard */
+        #dashboard {
+            position: relative;
+            background: linear-gradient(45deg, #0284ff, #1e3a8a); /* Fondo gradiente dinámico */
+            padding: 2rem;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        #dashboard::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.15)" fill-opacity="1" d="M0,224L60,213.3C120,203,240,181,360,181.3C480,181,600,203,720,192C840,181,960,139,1080,122.7C1200,107,1320,117,1380,122.7L1440,128L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>');
+            z-index: 0;
+        }
+
+        #dashboard::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at top left, rgba(0, 230, 118, 0.25), transparent 60%);
+            animation: rotatePulse 12s infinite ease-in-out;
+            z-index: 0;
+        }
+
+        #dashboard h2 {
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        #dashboard .holo {
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(145deg, #ffffff, #f8fafc);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        #dashboard .holo:hover {
+            transform: scale(1.03);
+        }
+
+        .dashboard-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 215, 0, 0.8);
+            border-radius: 50%;
+            animation: floatParticle 5s infinite ease-in-out;
+            z-index: 0;
+        }
+
+        @keyframes floatParticle {
+            0% { transform: translateY(0) scale(1); opacity: 0.8; }
+            50% { transform: translateY(-20px) scale(1.2); opacity: 0.5; }
+            100% { transform: translateY(0) scale(1); opacity: 0.8; }
+        }
+
+        @media (max-width: 768px) {
+            #dashboard {
+                padding: 1.5rem;
+            }
+            #dashboard h2 {
+                font-size: 1.75rem;
+            }
+            #dashboard .holo {
+                padding: 1rem;
+            }
+        }
+
         /* Estilos ajustados para Misiones */
         #misiones {
             position: relative;
-            background: linear-gradient(135deg, #1e3a8a, #00b4ff); /* Fondo gradiente más dinámico */
+            background: linear-gradient(135deg, #1e3a8a, #00b4ff);
             padding: 2rem;
             border-radius: 16px;
             overflow: hidden;
@@ -726,12 +813,6 @@
             border-radius: 50%;
             animation: floatParticle 6s infinite ease-in-out;
             z-index: 0;
-        }
-
-        @keyframes floatParticle {
-            0% { transform: translateY(0) scale(1); opacity: 0.8; }
-            50% { transform: translateY(-15px) scale(1.1); opacity: 0.4; }
-            100% { transform: translateY(0) scale(1); opacity: 0.8; }
         }
 
         @media (max-width: 768px) {
@@ -830,7 +911,7 @@
             <!-- Dashboard -->
             <div id="dashboard" class="section hidden fade-in">
                 <h2 class="text-3xl font-bold mb-6">Dashboard</h2>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
                     <div class="p-6 holo">
                         <i class="fas fa-dollar-sign"></i>
                         <div>
@@ -860,10 +941,24 @@
                             <p id="tasaDolar" class="text-2xl">43.50 Bs/USD <span id="tasaModo" class="text-sm">(Manual)</span></p>
                         </div>
                     </div>
+                    <!-- Nueva tarjeta: Tendencia Semanal -->
+                    <div class="p-6 holo">
+                        <i class="fas fa-chart-bar"></i>
+                        <div>
+                            <p class="font-bold text-teal-400">Tendencia Semanal</p>
+                            <p id="tendenciaSemanal" class="text-2xl">+12%</p>
+                            <p class="text-sm text-gray-400">vs semana pasada</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                <div class="grid grid-cols-1 md:grid-cols-1 gap-6 mt-6">
                     <div class="holo p-4"><canvas id="ventasChart"></canvas></div>
-                    <div class="holo p-4"><canvas id="productosChart"></canvas></div>
+                </div>
+                <!-- Partículas -->
+                <div class="absolute inset-0 pointer-events-none">
+                    <div class="dashboard-particle" style="top: 20%; left: 10%;"></div>
+                    <div class="dashboard-particle" style="top: 70%; left: 60%; animation-delay: 0.5s;"></div>
+                    <div class="dashboard-particle" style="top: 50%; left: 80%; animation-delay: 1s;"></div>
                 </div>
             </div>
 
