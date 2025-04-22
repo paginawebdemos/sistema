@@ -1,4 +1,4 @@
-﻿// Lista de frases motivadoras
+ // Lista de frases motivadoras
 const quotes = [
     "El éxito es la suma de pequeños esfuerzos repetidos día tras día.",
     "No dejes para mañana lo que puedes empezar hoy.",
