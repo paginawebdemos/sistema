@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- Metadatos -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inovix</title>
+
+    <!-- Estilos Externos -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Orbitron:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Scripts Externos -->
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/howler@2.2.3/dist/howler.min.js"></script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+    <!-- Pantalla de Login -->
+    <section id="login-screen" class="fixed inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black bg-opacity-95 flex items-center justify-center z-50 transition-opacity duration-300">
+        <div class="bg-gray-900 bg-opacity-80 backdrop-blur-xl p-8 rounded-xl max-w-md w-full shadow-2xl border border-gray-700/50 transform transition-all duration-300 hover:scale-105">
+            <h2 class="text-3xl font-extrabold mb-8 text-center text-white tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
+                Acceso al Sistema
+            </h2>
+            <div class="mb-6">
+                <label class="block text-gray-300 mb-2 text-sm font-medium" for="login-username">Usuario</label>
+                <input 
+                    id="login-username" 
+                    type="text" 
+                    class="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all duration-200"
+                    placeholder="Ingrese su usuario"
+                    autocomplete="username"
+                >
+            </div>
+            <div class="mb-8">
+                <label class="block text-gray-300 mb-2 text-sm font-medium" for="login-password">Contraseña</label>
+                <input 
+                    id="login-password" 
+                    type="password" 
+                    class="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all duration-200"
+                    placeholder="••••••••"
+                    autocomplete="current-password"
+                >
+            </div>
+            <button 
+                onclick="login()" 
+                class="w-full bg-gradient-to-r from-purple-600 to-blue-700 text-white py-3 rounded-lg font-semibold tracking-wide hover:from-purple-700 hover:to-blue-800 transform transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/50"
+            >
+                Iniciar Sesión
+            </button>
+        </div>
+    </section>
+
+    <!-- Pantalla de Bienvenida -->
+    <section id="welcome-screen" class="hidden text-center py-20 bg-gradient-to-br from-teal-500 to-blue-600 text-white">
+        <h1 class="text-5xl font-bold mb-4">Inovix</h1>
+        <p class="text-xl">Bienvenido a tu sistema de gestión empresarial</p>
+        <button onclick="document.getElementById('welcome-screen').style.display='none'" class="mt-6 px-6 py-2 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors">
+            Comenzar
+        </button>
+    </section>
+
+    <!-- Sistema Principal -->
+    <main id="sistema" class="flex min-h-screen hidden">
+        <!-- Botón Hamburguesa para móviles -->
+        <button class="md:hidden p-4 fixed top-0 left-0 z-20 text-black" onclick="document.getElementById('sidebar').classList.toggle('active')">
+            <i class="fas fa-bars text-2xl"></i>
+        </button>
+
+        <!-- Sidebar -->
+        <nav id="sidebar" class="sidebar p-4 flex flex-col bg-gray-800 text-white w-64 min-h-screen transition-transform duration-300">
+            <h2 id="businessName" class="text-2xl font-bold mb-6">Mi Negocio</h2>
+            <div class="space-y-2 flex-grow">
+                <button onclick="mostrarSeccion('inicio')" id="nav-inicio" class="nav-btn active">
+                    <i class="fas fa-home mr-2"></i> Inicio
+                </button>
+                <button onclick="mostrarSeccion('dashboard')" id="nav-dashboard" class="nav-btn">
+                    <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
+                </button>
+                <button onclick="mostrarSeccion('ventas')" id="nav-ventas" class="nav-btn">
+                    <i class="fas fa-shopping-cart mr-2"></i> Ventas
+                </button>
+                <button onclick="mostrarSeccion('fiar')" id="nav-fiar" class="nav-btn">
+                    <i class="fas fa-handshake mr-2"></i> Fiar
+                </button>
+                <button onclick="mostrarSeccion('inventario')" id="nav-inventario" class="nav-btn">
+                    <i class="fas fa-boxes mr-2"></i> Inventario
+                </button>
+                <button onclick="mostrarSeccion('clientes')" id="nav-clientes" class="nav-btn">
+                    <i class="fas fa-users mr-2"></i> Clientes
+                </button>
+                <button onclick="mostrarSeccion('proveedores')" id="nav-proveedores" class="nav-btn">
+                    <i class="fas fa-truck mr-2"></i> Proveedores
+                </button>
+                <button onclick="mostrarSeccion('reportes')" id="nav-reportes" class="nav-btn">
+                    <i class="fas fa-chart-line mr-2"></i> Reportes
+                </button>
+                <button onclick="mostrarSeccion('config')" id="nav-config" class="nav-btn">
+                    <i class="fas fa-cog mr-2"></i> Configuración
+                </button>
+                <button onclick="mostrarSeccion('actividades')" id="nav-actividades" class="nav-btn">
+                    <i class="fas fa-history mr-2"></i> Historial
+                </button>
+            </div>
+            <button onclick="cerrarSesion()" id="btn-logout" class="nav-btn mt-4 bg-red-600 hover:bg-red-700">
+                <i class="fas fa-sign-out-alt mr-2"></i> Cerrar Sesión
+            </button>
+        </nav>
+
+        <!-- Contenido Principal -->
+        <section class="flex-1 content p-6 overflow-auto">
+            <!-- Placeholder para bienvenida -->
+            <div id="welcome-placeholder"></div>
+
+            <!-- Sección Inicio -->
+            <div id="inicio" class="section fade-in">
+                <header class="header relative py-12 text-center">
+                    <div class="graphic circle"></div>
+                    <div class="graphic triangle"></div>
+                    <div class="graphic square"></div>
+                    <div class="graphic zigzag"></div>
+                    <div class="header-content">
+                        <h2 class="text-4xl font-bold text-gray-800 animate-fade-in-down">Bienvenido a Inovix</h2>
+                        <p class="text-lg text-gray-600 mt-2 animate-fade-in-up">Tu solución integral para la gestión empresarial</p>
+                        <button onclick="mostrarSeccion('dashboard')" class="mt-8 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors animate-pulse">
+                            Explorar Ahora
+                        </button>
+                    </div>
+                </header>
+                <p id="dailyQuote" class="text-center text-gray-500 italic mt-6 animate-quote-reveal"></p>
+                <footer class="mt-8 text-center text-sm text-gray-500">
+                    Desarrollado por <strong class="text-teal-600">Inovixe</strong>
+                </footer>
+            </div>
+
+            <!-- Sección Dashboard -->
+            <div id="dashboard" class="section hidden fade-in">
+                <h2 class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-teal-500 animate-fade-in-down mb-6">Dashboard</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="p-6 holo dashboard-card flex items-center gap-4">
+                        <i class="fas fa-dollar-sign text-blue-400 text-2xl"></i>
+                        <div>
+                            <p class="font-bold text-blue-400">Ventas Hoy</p>
+                            <p id="ventasHoy" class="text-2xl">Cargando...</p>
+                            <p id="rendimiento" class="text-sm text-gray-400">Cargando...</p>
+                        </div>
+                    </div>
+                    <div class="p-6 holo dashboard-card flex items-center gap-4">
+                        <i class="fas fa-exclamation-triangle text-yellow-400 text-2xl"></i>
+                        <div>
+                            <p class="font-bold text-yellow-400">Stock Bajo</p>
+                            <p id="stockBajo" class="text-2xl">Cargando...</p>
+                        </div>
+                    </div>
+                    <div class="p-6 holo dashboard-card flex items-center gap-4">
+                        <i class="fas fa-users text-green-400 text-2xl"></i>
+                        <div>
+                            <p class="font-bold text-green-400">Clientes</p>
+                            <p id="totalClientes" class="text-2xl">Cargando...</p>
+                        </div>
+                    </div>
+                    <div class="p-6 holo dashboard-card flex items-center gap-4">
+                        <i class="fas fa-handshake text-purple-400 text-2xl"></i>
+                        <div>
+                            <p class="font-bold text-purple-400">Fiados Pendientes</p>
+                            <p id="fiadosPendientes" class="text-2xl">Cargando...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mt-6">
+                    <div class="holo p-4 dashboard-card md:col-span-3">
+                        <canvas id="ventasChart"></canvas>
+                    </div>
+                    <div class="holo p-6 dashboard-card md:col-span-2 flex flex-col justify-center text-center">
+                        <i class="fas fa-exchange-alt text-blue-400 text-2xl mb-2"></i>
+                        <p class="font-bold text-blue-400 text-lg mb-1">Tasa del Dólar</p>
+                        <p id="tasaDolar" class="text-3xl font-bold">Cargando...</p>
+                    </div>
+                </div>
+                <div class="absolute inset-0 pointer-events-none">
+                    <div class="dashboard-particle" style="top: 20%; left: 10%;"></div>
+                    <div class="dashboard-particle" style="top: 70%; left: 60%; animation-delay: 0.5s;"></div>
+                    <div class="dashboard-particle" style="top: 50%; left: 80%; animation-delay: 1s;"></div>
+                </div>
+            </div>
+
+            <!-- Sección Inventario -->
+            <div id="inventario" class="section hidden fade-in">
+                <h2 class="text-3xl font-bold mb-6 text-gray-800">Gestión de Inventario</h2>
+                <div class="flex flex-col sm:flex-row gap-4 mb-6">
+                    <input 
+                        type="text" 
+                        id="buscarInventario" 
+                        class="flex-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" 
+                        placeholder="Buscar producto" 
+                        oninput="filtrarInventario()"
+                    >
+                    <button 
+                        onclick="abrirModal('modalProducto')" 
+                        class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+                    >
+                        <i class="fas fa-plus"></i> Agregar Producto
+                    </button>
+                </div>
+                <div class="overflow-x-auto rounded-lg shadow-lg">
+                    <table class="w-full border-collapse bg-white">
+                        <thead class="bg-gray-800 text-white">
+                            <tr>
+                                <th class="p-3 text-left">Nombre</th>
+                                <th class="p-3 text-left">P. Compra (Bs)</th>
+                                <th class="p-3 text-left">P. Compra (USD)</th>
+                                <th class="p-3 text-left">P. Venta (Bs)</th>
+                                <th class="p-3 text-left">P. Venta (USD)</th>
+                                <th class="p-3 text-left">Stock</th>
+                                <th class="p-3 text-left">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaInventario" class="divide-y divide-gray-200"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Sección Ventas -->
+            <div id="ventas" class="section hidden fade-in flex justify-center items-center min-h-screen bg-gray-50">
+                <div class="w-full max-w-4xl mx-4 bg-white rounded-xl shadow-lg overflow-hidden">
+                    <header class="bg-gradient-to-r from-blue-600 to-purple-600 p-4">
+                        <h2 class="text-2xl font-bold text-center text-white">Registrar Venta</h2>
+                    </header>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                            <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                                <h3 class="text-base font-semibold mb-3 text-gray-700">Agregar Productos</h3>
+                                <input 
+                                    type="text" 
+                                    id="buscarProductoVenta" 
+                                    class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm" 
+                                    placeholder="Buscar producto..." 
+                                    oninput="filtrarProductos('productosVenta')"
+                                >
+                                <select id="productosVenta" class="w-full p-2 mt-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm"></select>
+                                <input 
+                                    type="number" 
+                                    id="cantidadVenta" 
+                                    class="w-full p-2 mt-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm" 
+                                    placeholder="Cantidad" 
+                                    min="1"
+                                >
+                                <button 
+                                    onclick="agregarProductoVenta()" 
+                                    class="w-full mt-3 bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 transition-colors text-sm flex items-center justify-center gap-2"
+                                >
+                                    <i class="fas fa-cart-plus"></i> Agregar al Carrito
+                                </button>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                                <h3 class="text-base font-semibold mb-3 text-gray-700">Datos del Cliente</h3>
+                                <input 
+                                    type="text" 
+                                    id="nombreClienteVenta" 
+                                    list="clientesList" 
+                                    class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm" 
+                                    placeholder="Nombre del Cliente (Opcional)"
+                                >
+                                <input 
+                                    type="text" 
+                                    id="telefonoClienteVenta" 
+                                    class="w-full p-2 mt-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm" 
+                                    placeholder="Teléfono (Opcional)"
+                                >
+                                <datalist id="clientesList"></datalist>
+                            </div>
+                        </div>
+                        <div class="configuracion-venta bg-gray-50 p-4 rounded-lg border border-gray-200 mb-6">
+                            <h3 class="text-base font-semibold mb-3 text-gray-700">Configuración de Venta</h3>
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="iva-toggle-container flex items-center gap-2">
+                                    <input type="checkbox" id="toggleIVA" class="iva-toggle-input">
+                                    <span class="iva-toggle-slider iva-toggle-yellow"></span>
+                                    <span class="iva-toggle-label text-sm text-gray-700">Aplicar IVA (16%)</span>
+                                </label>
+                                <div id="ivaInfo" class="iva-info-display hidden text-sm text-gray-700">
+                                    IVA: <span id="ivaAmount">0.00</span> Bs
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Descuento (%)</label>
+                                <div class="flex gap-2">
+                                    <input 
+                                        type="number" 
+                                        id="descuentoInput" 
+                                        min="0" 
+                                        max="100" 
+                                        value="0" 
+                                        class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    >
+                                    <button 
+                                        onclick="aplicarDescuento()" 
+                                        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                                    >
+                                        Aplicar
+                                    </button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Método de Pago</label>
+                                <select id="metodoPagoSelect" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="Efectivo">Efectivo</option>
+                                    <option value="Punto">Punto</option>
+                                    <option value="Pago Móvil">Pago Móvil</option>
+                                    <option value="Transferencia">Transferencia</option>
+                                    <option value="Zelle">Zelle</option>
+                                    <option value="PayPal">PayPal</option>
+                                    <option value="Binance">Binance</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h3 class="text-base font-semibold mb-3 text-gray-700">Carrito de Venta</h3>
+                            <div class="overflow-x-auto max-h-64 overflow-y-auto">
+                                <table class="w-full border-collapse text-sm">
+                                    <thead>
+                                        <tr class="bg-gray-100">
+                                            <th class="p-2 text-left text-gray-600">Producto</th>
+                                            <th class="p-2 text-left text-gray-600">Cantidad</th>
+                                            <th class="p-2 text-left text-gray-600">Precio Unitario</th>
+                                            <th class="p-2 text-left text-gray-600">Total</th>
+                                            <th class="p-2 text-left text-gray-600">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="detalleVenta" class="divide-y divide-gray-200"></tbody>
+                                </table>
+                            </div>
+                            <div class="mt-4 p-3 bg-white rounded-md shadow-sm">
+                                <p class="text-base font-semibold"><strong>Total en Bolívares:</strong> <span id="totalBsVenta" class="text-blue-600">0.00</span></p>
+                                <p class="text-base font-semibold"><strong>Total en Dólares:</strong> <span id="totalUsdVenta" class="text-blue-600">0.00</span></p>
+                            </div>
+                            <div class="mt-4 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
+                                <button 
+                                    onclick="finalizarVenta()" 
+                                    class="flex-1 bg-green-600 text-white p-2 rounded-md hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
+                                >
+                                    <i class="fas fa-check-circle"></i> Finalizar Venta
+                                </button>
+                                <button 
+                                    onclick="imprimirTicket('venta')" 
+                                    class="flex-1 bg-gray-600 text-white p-2 rounded-md hover:bg-gray-700 transition-colors flex items-center justify-center gap-2"
+                                >
+                                    <i class="fas fa-print"></i> Imprimir Ticket
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección Clientes -->
+            <div id="clientes" class="section hidden fade-in">
+                <h2 class="text-3xl font-bold mb-6 text-gray-800">Clientes Registrados</h2>
+                <div class="flex gap-4 mb-6">
+                    <input 
+                        type="text" 
+                        id="buscarCliente" 
+                        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" 
+                        placeholder="Buscar cliente" 
+                        oninput="filtrarClientes()"
+                    >
+                </div>
+                <div class="overflow-x-auto rounded-lg shadow-lg">
+                    <table class="w-full border-collapse bg-white">
+                        <thead class="bg-gray-800 text-white">
+                            <tr>
+                                <th class="p-3 text-left">Nombre</th>
+                                <th class="p-3 text-left">Teléfono</th>
+                                <th class="p-3 text-left">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaClientes" class="divide-y divide-gray-200"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Sección Fiar -->
+            <div id="fiar" class="section hidden fade-in">
+                <div class="max-w-4xl mx-auto p-6 bg-gray-50 rounded-lg border border-gray-300">
+                    <header class="bg-gradient-to-r from-blue-600 to-purple-600 p-4 mb-6">
+                        <h2 class="text-2xl font-bold text-center text-white">Clientes que Fían</h2>
+                    </header>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Buscar Producto</label>
+                            <input 
+                                type="text" 
+                                id="buscarProductoFiar" 
+                                class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                                placeholder="Buscar producto" 
+                                oninput="filtrarProductos('productosFiar')"
+                            >
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Seleccionar Producto</label>
+                            <select id="productosFiar" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Cantidad</label>
+                            <input 
+                                type="number" 
+                                id="cantidadFiar" 
+                                class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                                placeholder="Cantidad"
+                            >
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Nombre del Cliente</label>
+                            <input 
+                                type="text" 
+                                id="nombreClienteFiar" 
+                                list="clientesListFiar" 
+                                class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                                placeholder="Nombre del Cliente" 
+                                required
+                            >
+                            <datalist id="clientesListFiar"></datalist>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Teléfono del Cliente</label>
+                            <input 
+                                type="text" 
+                                id="telefonoClienteFiar" 
+                                class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                                placeholder="Teléfono del Cliente"
+                            >
+                        </div>
+                    </div>
+                    <div class="flex justify-end mb-6">
+                        <button 
+                            onclick="agregarProductoFiar()" 
+                            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                        >
+                            Agregar Producto
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="p-3 text-left text-gray-700">Producto</th>
+                                    <th class="p-3 text-left text-gray-700">Cantidad</th>
+                                    <th class="p-3 text-left text-gray-700">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="detalleFiar" class="divide-y divide-gray-200"></tbody>
+                        </table>
+                    </div>
+                    <div class="mt-6">
+                        <button 
+                            onclick="guardarFiado()" 
+                            class="w-full px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                        >
+                            Guardar Fiado
+                        </button>
+                    </div>
+                    <div class="mt-8">
+                        <h3 class="text-2xl font-bold mb-4 text-gray-800 text-center">Fiados Registrados</h3>
+                        <div class="overflow-x-auto max-h-96 overflow-y-auto border border-gray-300 rounded-lg">
+                            <table class="w-full border-collapse">
+                                <thead>
+                                    <tr class="bg-gray-100">
+                                        <th class="p-3 text-center text-gray-700">Fecha</th>
+                                        <th class="p-3 text-center text-gray-700">Cliente</th>
+                                        <th class="p-3 text-center text-gray-700">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaFiados" class="divide-y divide-gray-200"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección Reportes -->
+            <div id="reportes" class="section hidden fade-in">
+                <h2 class="text-3xl font-bold mb-6 text-gray-800">Reportes de Ventas</h2>
+                <form id="filtrosReporte" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <div>
+                        <label for="buscarVenta" class="block text-sm font-medium text-gray-700 mb-1">Buscar Cliente</label>
+                        <input 
+                            type="text" 
+                            id="buscarVenta" 
+                            class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                            placeholder="Nombre del cliente" 
+                            oninput="filtrarVentas()"
+                        >
+                    </div>
+                    <div>
+                        <label for="filtroFecha" class="block text-sm font-medium text-gray-700 mb-1">Fecha</label>
+                        <input 
+                            type="date" 
+                            id="filtroFecha" 
+                            class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                            onchange="filtrarVentas()"
+                        >
+                    </div>
+                    <div>
+                        <label for="tipoReporte" class="block text-sm font-medium text-gray-700 mb-1">Tipo de Reporte</label>
+                        <select 
+                            id="tipoReporte" 
+                            class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                            onchange="filtrarVentas()"
+                        >
+                            <option value="todos">Todos</option>
+                            <option value="directas">Ventas Directas</option>
+                            <option value="fiados">Fiados Pagados</option>
+                        </select>
+                    </div>
+                    <div class="flex items-end">
+                        <button 
+                            type="button" 
+                            onclick="limpiarFiltros()" 
+                            class="w-full px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors"
+                        >
+                            Limpiar Filtros
+                        </button>
+                    </div>
+                </form>
+                <div class="flex justify-end mb-4">
+                    <div class="flex items-center space-x-4 text-sm">
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-blue-500 rounded-full mr-2"></div>
+                            <span>Venta Directa</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-purple-500 rounded-full mr-2"></div>
+                            <span>Fiado Pagado</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="scrollable-table-container">
+                    <table class="reportes-table w-full border-collapse">
+                        <thead>
+                            <tr class="bg-gray-800 text-white">
+                                <th class="p-3 text-left">Fecha</th>
+                                <th class="p-3 text-left">Cliente</th>
+                                <th class="p-3 text-left">Tipo</th>
+                                <th class="p-3 text-right">Total (Bs)</th>
+                                <th class="p-3 text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reporteVentasBody"></tbody>
+                        <tfoot>
+                            <tr class="bg-gray-100">
+                                <td colspan="3" class="p-3 text-right font-bold">Total General:</td>
+                                <td class="p-3 text-right font-bold" id="totalBsReporte">0.00</td>
+                                <td class="p-3 text-right font-bold" id="totalUsdReporte">0.00</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="flex justify-end mt-4">
+                    <button 
+                        onclick="descargarReporteVentasPDF()" 
+                        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                    >
+                        Descargar PDF
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Detalles de Venta -->
+            <div id="modalVerVenta" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                <div class="modal-content bg-white p-6 rounded-lg max-w-md w-full">
+                    <h3 class="text-lg font-bold mb-2">Detalles de la Venta</h3>
+                    <div id="detalleVerVenta" class="space-y-2"></div>
+                    <div class="flex mt-4">
+                        <button 
+                            onclick="cerrarModal('modalVerVenta')" 
+                            class="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition-colors"
+                        >
+                            Cerrar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección Proveedores -->
+            <div id="proveedores" class="section hidden fade-in">
+                <h2 class="text-3xl font-bold mb-6 text-gray-800">Gestión de Proveedores</h2>
+                <div class="flex gap-4 mb-6">
+                    <button 
+                        onclick="abrirModal('modalProveedor')" 
+                        class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
+                    >
+                        <i class="fas fa-plus"></i> Agregar Proveedor
+                    </button>
+                </div>
+                <div class="overflow-x-auto rounded-lg shadow-lg">
+                    <table class="w-full border-collapse bg-white">
+                        <thead class="bg-gray-800 text-white">
+                            <tr>
+                                <th class="p-3 text-left">Nombre</th>
+                                <th class="p-3 text-left">Contacto</th>
+                                <th class="p-3 text-left">Productos</th>
+                                <th class="p-3 text-left">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaProveedores" class="divide-y divide-gray-200"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Sección Configuración -->
+            <div id="config" class="section hidden fade-in bg-blue-50">
+                <h2 class="text-4xl font-bold mb-8 text-center text-gray-800" style="font-family: 'Orbitron', sans-serif; font-weight: 700;">
+                    Configuración
+                    <span class="block w-16 h-1.5 bg-blue-500 rounded-full mx-auto mt-3"></span>
+                </h2>
+                <form id="formConfig" onsubmit="event.preventDefault(); guardarConfig();" class="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+                    <div class="mb-8">
+                        <label class="block text-sm font-medium text-gray-600 mb-2" for="configBusinessName">Nombre del Negocio</label>
+                        <input 
+                            type="text" 
+                            id="configBusinessName" 
+                            class="w-full p-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-gray-400 text-gray-700" 
+                            placeholder="Ingresa el nombre de tu negocio"
+                        >
+                    </div>
+                    <div class="mb-8">
+                        <label class="block text-sm font-medium text-gray-600 mb-2" for="configTasaDolar">Tasa del Dólar (Bs/USD)</label>
+                        <input 
+                            type="number" 
+                            id="configTasaDolar" 
+                            class="w-full p-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-gray-400 text-gray-700" 
+                            placeholder="Ej: 43.50" 
+                            step="0.01"
+                        >
+                    </div>
+                    <div class="mb-8">
+                        <label class="block text-sm font-medium text-gray-600 mb-2" for="configTasaModo">Modo de Tasa</label>
+                        <select 
+                            id="configTasaModo" 
+                            class="w-full p-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white text-gray-700"
+                        >
+                            <option value="manual">Manual</option>
+                            <option value="automatico">Automático</option>
+                        </select>
+                    </div>
+                    <div class="flex justify-end">
+                        <button 
+                            type="submit" 
+                            class="px-6 py-2 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-all flex items-center gap-2 shadow-lg hover:shadow-xl"
+                        >
+                            <i class="fas fa-save"></i> Guardar Cambios
+                        </button>
+                    </div>
+                </form>
+                <div class="mt-8 max-w-2xl mx-auto">
+                    <h3 class="text-xl font-bold mb-4">Gestión de Usuarios</h3>
+                    <div class="bg-white p-4 rounded-lg shadow mb-6">
+                        <h4 class="font-semibold mb-3">Mi Cuenta</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm text-gray-600 mb-1" for="usuario-nombre">Nombre</label>
+                                <input id="usuario-nombre" type="text" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-600 mb-1" for="usuario-username">Usuario</label>
+                                <input id="usuario-username" type="text" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-600 mb-1" for="usuario-password">Nueva Contraseña</label>
+                                <input 
+                                    id="usuario-password" 
+                                    type="password" 
+                                    class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                                    placeholder="Dejar en blanco para no cambiar"
+                                >
+                            </div>
+                            <div class="flex items-end">
+                                <button 
+                                    onclick="actualizarUsuario()" 
+                                    class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors"
+                                >
+                                    Actualizar Mis Datos
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="admin-users-section" class="hidden">
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="font-semibold">Administración de Usuarios</h4>
+                            <button 
+                                onclick="abrirModal('modalNuevoUsuario')" 
+                                class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-sm flex items-center gap-1"
+                            >
+                                <i class="fas fa-plus"></i> Nuevo Usuario
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto rounded-lg shadow">
+                            <table class="w-full border-collapse bg-white">
+                                <thead class="bg-gray-700 text-white">
+                                    <tr>
+                                        <th class="p-2 text-left">Nombre</th>
+                                        <th class="p-2 text-left">Usuario</th>
+                                        <th class="p-2 text-left">Rol</th>
+                                        <th class="p-2 text-left">Último Login</th>
+                                        <th class="p-2 text-left">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaUsuarios" class="divide-y divide-gray-200"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección Historial de Actividades -->
+            <div id="actividades" class="section hidden fade-in">
+                <h2 class="text-3xl font-bold mb-6 text-gray-800">Historial de Actividades</h2>
+                <div class="overflow-x-auto rounded-lg shadow-lg">
+                    <table class="w-full border-collapse bg-white">
+                        <thead class="bg-gray-800 text-white">
+                            <tr>
+                                <th class="p-3 text-left">Fecha</th>
+                                <th class="p-3 text-left">Usuario</th>
+                                <th class="p-3 text-left">Acción</th>
+                                <th class="p-3 text-left">Detalles</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaActividades" class="divide-y divide-gray-200"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modales -->
+    <!-- Modal Nuevo Usuario -->
+    <div id="modalNuevoUsuario" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="modal-content bg-white p-6 rounded-lg max-w-md w-full">
+            <h3 class="text-lg font-bold mb-4">Nuevo Usuario</h3>
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-sm text-gray-600 mb-1" for="nuevo-usuario-nombre">Nombre Completo</label>
+                    <input id="nuevo-usuario-nombre" type="text" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" required>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-600 mb-1" for="nuevo-usuario-username">Nombre de Usuario</label>
+                    <input id="nuevo-usuario-username" type="text" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" required>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-600 mb-1" for="nuevo-usuario-password">Contraseña</label>
+                    <input id="nuevo-usuario-password" type="password" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" required>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-600 mb-1" for="nuevo-usuario-rol">Rol</label>
+                    <select id="nuevo-usuario-rol" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500">
+                        <option value="usuario">Usuario</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+                </div>
+                <div class="flex space-x-2 pt-2">
+                    <button 
+                        onclick="crearUsuario()" 
+                        class="flex-1 bg-green-600 text-white py-2 rounded hover:bg-green-700 transition-colors"
+                    >
+                        Crear
+                    </button>
+                    <button 
+                        onclick="cerrarModal('modalNuevoUsuario')" 
+                        class="flex-1 bg-gray-500 text-white py-2 rounded hover:bg-gray-600 transition-colors"
+                    >
+                        Cancelar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Producto -->
+    <div id="modalProducto" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="modal-content bg-white p-6 rounded-lg max-w-md w-full">
+            <h3 class="text-lg font-bold mb-2">Agregar Producto</h3>
+            <form id="formProducto" class="space-y-2" onsubmit="event.preventDefault(); guardarProducto();">
+                <input 
+                    type="text" 
+                    id="nombreProducto" 
+                    class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    placeholder="Nombre" 
+                    required
+                >
+                <input 
+                    type="number" 
+                    id="precioCompraBs" 
+                    class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    placeholder="Precio Compra (Bs)" 
+                    step="0.01"
+                >
+                <input 
+                    type="number" 
+                    id="precioCompraUsd" 
+                    class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    placeholder="Precio Compra (USD)" 
+                    step="0.01"
+                >
+                <input 
+                    type="number" 
+                    id="precioVentaUsd" 
+                    class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    placeholder="Precio Venta (USD)" 
+                    step="0.01" 
+                    oninput="calcularPrecioVentaBs()"
+                >
+                <input 
+                    type="number" 
+                    id="precioVentaBs" 
+                    class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    placeholder="Precio Venta (Bs)" 
+                    step="0.01" 
+                    oninput="calcularPrecioVentaUsd()"
+                >
+                <input 
+                    type="number" 
+                    id="stockProducto" 
+                    class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    placeholder="Stock"
+                >
+                <div class="flex space-x-2">
+                    <button 
+                        type="submit" 
+                        class="flex-1 bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition-colors"
+                    >
+                        Guardar
+                    </button>
+                    <button 
+                        type="button" 
+                        onclick="cerrarModal('modalProducto')" 
+                        class="flex-1 bg-red-500 text-white py-2 rounded hover:bg-red-600 transition-colors"
+                    >
+                        Cerrar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Editar Producto -->
+    <div id="modalEditarProducto" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="modal-content bg-white p-6 rounded-lg max-w-md w-full">
+            <h3 class="text-lg font-bold mb-2">Editar Producto</h3>
+            <form id="formEditarProducto" class="space-y-2" onsubmit="event.preventDefault(); guardarEdicionProducto();">
+                <input type="hidden" id="editProductoIndex">
+                <input 
+                    type="text" 
+                    id="editNombreProducto" 
+                    class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    placeholder="Nombre" 
+                    required
+                >
+                <input 
+                    type="number" 
+                    id="editPrecioCompraBs" 
+                    class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    placeholder="Precio Compra (Bs)" 
+                    step="0.01" 
+                    required
+                >
+                <input 
+                    type="number" 
+                    id="editPrecioCompraUsd" 
+                    class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    placeholder="Precio Compra (USD)" 
+                    step="0.01" 
+                    required
+                >
+                <input 
+                    type="number" 
+                    id="editPrecioVentaUsd" 
+                    class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    placeholder="Precio Venta (USD)" 
+                    step="0.01" 
+                    required 
+                    oninput="actualizarPrecioVentaBs()"
+                >
+                <input 
+                    type="number" 
+                    id="editPrecioVentaBs" 
+                    class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    placeholder="Precio Venta (Bs)" 
+                    step="0.01" 
+                    required 
+                    oninput="actualizarPrecioVentaUsd()"
+                >
+                <input 
+                    type="number" 
+                    id="editStockProducto" 
+                    class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    placeholder="Stock" 
+                    required
+                >
+                <div class="flex space-x-2">
+                    <button 
+                        type="submit" 
+                        class="flex-1 bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition-colors"
+                    >
+                        Guardar
+                    </button>
+                    <button 
+                        type="button" 
+                        onclick="cerrarModal('modalEditarProducto')" 
+                        class="flex-1 bg-red-500 text-white py-2 rounded hover:bg-red-600 transition-colors"
+                    >
+                        Cerrar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Editar Producto en Venta -->
+    <div id="modalEditarProductoVenta" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="modal-content bg-white p-6 rounded-lg max-w-md w-full">
+            <h3 class="text-lg font-bold mb-2">Editar Producto en Venta</h3>
+            <form id="formEditarProductoVenta" class="space-y-2" onsubmit="event.preventDefault(); guardarEdicionProductoVenta();">
+                <input type="hidden" id="editProductoVentaIndex">
+                <input 
+                    type="text" 
+                    id="editNombreProductoVenta" 
+                    class="w-full p-2 border rounded bg-gray-100" 
+                    readonly
+                >
+                <input 
+                    type="number" 
+                    id="editCantidadProductoVenta" 
+                    class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-yellow-500" 
+                    placeholder="Cantidad" 
+                    required
+                >
+                <div class="flex space-x-2">
+                    <button 
+                        type="submit" 
+                        class="flex-1 bg-yellow-500 text-white py-2 rounded hover:bg-yellow-600 transition-colors"
+                    >
+                        Guardar
+                    </button>
+                    <button 
+                        type="button" 
+                        onclick="cerrarModal('modalEditarProductoVenta')" 
+                        class="flex-1 bg-red-500 text-white py-2 rounded hover:bg-red-600 transition-colors"
+                    >
+                        Cerrar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Editar Producto en Fiado -->
+    <div id="modalEditarProductoFiar" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="modal-content bg-white p-6 rounded-lg max-w-md w-full">
+            <h3 class="text-lg font-bold mb-2">Editar Producto en Fiado</h3>
+            <form id="formEditarProductoFiar" class="space-y-2" onsubmit="event.preventDefault(); guardarEdicionProductoFiar();">
+                <input type="hidden" id="editProductoFiarIndex">
+                <input 
+                    type="text" 
+                    id="editNombreProductoFiar" 
+                    class="w-full p-2 border rounded bg-gray-100" 
+                    readonly
+                >
+                <input 
+                    type="number" 
+                    id="editCantidadProductoFiar" 
+                    class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-teal-500" 
+                    placeholder="Cantidad" 
+                    required
+                >
+                <div class="flex space-x-2">
+                    <button 
+                        type="submit" 
+                        class="flex-1 bg-teal-500 text-white py-2 rounded hover:bg-teal-600 transition-colors"
+                    >
+                        Guardar
+                    </button>
+                    <button 
+                        type="button" 
+                        onclick="cerrarModal('modalEditarProductoFiar')" 
+                        class="flex-1 bg-red-500 text-white py-2 rounded hover:bg-red-600 transition-colors"
+                    >
+                        Cerrar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Proveedor -->
+    <div id="modalProveedor" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="modal-content bg-white p-6 rounded-lg max-w-md w-full">
+            <h3 class="text-lg font-bold mb-2">Agregar Proveedor</h3>
+            <form id="formProveedor" class="space-y-2" onsubmit="event.preventDefault(); guardarProveedor();">
+                <input 
+                    type="text" 
+                    id="nombreProveedor" 
+                    class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" 
+                    placeholder="Nombre" 
+                    required
+                >
+                <input 
+                    type="text" 
+                    id="contactoProveedor" 
+                    class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" 
+                    placeholder="Contacto" 
+                    required
+                >
+                <input 
+                    type="text" 
+                    id="productosProveedor" 
+                    class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" 
+                    placeholder="Productos (separados por coma)"
+                >
+                <div class="flex space-x-2">
+                    <button 
+                        type="submit" 
+                        class="flex-1 bg-green-500 text-white py-2 rounded hover:bg-green-600 transition-colors"
+                    >
+                        Guardar
+                    </button>
+                    <button 
+                        type="button" 
+                        onclick="cerrarModal('modalProveedor')" 
+                        class="flex-1 bg-red-500 text-white py-2 rounded hover:bg-red-600 transition-colors"
+                    >
+                        Cerrar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Editar Fiado -->
+    <div id="modalEditarFiado" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="modal-content bg-white p-6 rounded-lg max-w-md w-full">
+            <h2 class="text-xl font-bold mb-2">Editar Fiado</h2>
+            <form id="formEditarFiado" class="space-y-2" onsubmit="event.preventDefault(); guardarEdicionFiado();">
+                <input type="hidden" id="editFiadoIndex">
+                <input 
+                    type="text" 
+                    id="editClienteFiado" 
+                    class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+                    placeholder="Nombre del Cliente"
+                >
+                <div class="flex gap-2">
+                    <select 
+                        id="editProductosFiado" 
+                        class="flex-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    ></select>
+                    <input 
+                        type="number" 
+                        id="editCantidadFiado" 
+                        class="w-24 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+                        placeholder="Cantidad"
+                    >
+                    <button 
+                        type="button" 
+                        onclick="agregarProductoEditarFiado()" 
+                        class="px-4 py-2 bg-teal-500 text-white rounded hover:bg-teal-600 transition-colors"
+                    >
+                        Agregar
+                    </button>
+                </div>
+                <div class="max-h-40 overflow-y-auto">
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr class="bg-gray-700 text-white">
+                                <th class="border p-1">Producto</th>
+                                <th class="border p-1">Cantidad</th>
+                                <th class="border p-1">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="detalleEditarFiado"></tbody>
+                    </table>
+                </div>
+                <div class="flex space-x-2 mt-2">
+                    <button 
+                        type="submit" 
+                        class="flex-1 bg-indigo-500 text-white py-2 rounded hover:bg-indigo-600 transition-colors"
+                    >
+                        Guardar Cambios
+                    </button>
+                    <button 
+                        type="button" 
+                        onclick="cerrarModal('modalEditarFiado')" 
+                        class="flex-1 bg-red-500 text-white py-2 rounded hover:bg-red-600 transition-colors"
+                    >
+                        Cerrar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Ver Fiado -->
+    <div id="modalVerFiado" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="modal-content bg-white p-6 rounded-lg max-w-md w-full">
+            <h3 class="text-lg font-bold mb-2">Detalles de Fiado</h3>
+            <div id="detalleVerFiado" class="space-y-2"></div>
+            <div class="flex mt-2">
+                <button 
+                    onclick="cerrarModal('modalVerFiado')" 
+                    class="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition-colors"
+                >
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Historial Cliente -->
+    <div id="modalHistorialCliente" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-gray-800 p-6 rounded-lg w-full max-w-4xl max-h-[80vh] overflow-auto">
+            <h2 class="text-xl font-bold mb-4 text-white">Historial de <span id="historialClienteNombre"></span></h2>
+            <div class="scrollable-table-container">
+                <table class="w-full border-collapse holo">
+                    <thead>
+                        <tr class="bg-gray-700 text-white">
+                            <th class="border p-2">Fecha</th>
+                            <th class="border p-2">Tipo</th>
+                            <th class="border p-2">Productos</th>
+                            <th class="border p-2">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historialClienteBody"></tbody>
+                </table>
+            </div>
+            <button 
+                onclick="cerrarModal('modalHistorialCliente')" 
+                class="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
+            >
+                Cerrar
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal Pagar Fiado -->
+    <div id="modalPagarFiado" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="modal-content bg-white p-6 rounded-lg max-w-md w-full">
+            <h3 class="text-lg font-bold mb-4">Pagar Fiado</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1" for="metodoPagoFiado">Método de Pago</label>
+                    <select 
+                        id="metodoPagoFiado" 
+                        class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+                    >
+                        <option value="Efectivo">Efectivo</option>
+                        <option value="Punto">Punto</option>
+                        <option value="Pago Móvil">Pago Móvil</option>
+                        <option value="Transferencia">Transferencia</option>
+                        <option value="Zelle">Zelle</option>
+                    </select>
+                </div>
+                <div class="flex space-x-2">
+                    <button 
+                        onclick="confirmarPagoFiado()" 
+                        class="flex-1 bg-green-600 text-white p-2 rounded hover:bg-green-700 transition-colors"
+                    >
+                        Confirmar Pago
+                    </button>
+                    <button 
+                        onclick="cerrarModal('modalPagarFiado')" 
+                        class="flex-1 bg-gray-500 text-white p-2 rounded hover:bg-gray-600 transition-colors"
+                    >
+                        Cancelar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ticket (Oculto) -->
+    <div id="ticket" class="hidden">
+        <h3 id="ticketBusinessName" class="text-lg font-bold"></h3>
+        <div id="ticketDetalle"></div>
+    </div>
+
+    <!-- Script Principal -->
+    <script src="script.js"></script>
+</body>
+</html>
